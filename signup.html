@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign up for Code Quest, a platform for coding enthusiasts to connect, learn, and explore coding challenges.">
+    <meta name="keywords" content="Code Quest, Signup, Programming, Coding, Web Development, Learning">
+    <meta name="author" content="Devanshu Sharma">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Code Quest - Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            background: url('https://cdn.pixabay.com/photo/2023/09/24/15/52/ai-generated-8273245_1280.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            padding: 28px 20px 28px 20px;
+            width: 350px;
+            max-width: 95vw;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s;
+        }
+        .signup-container:hover {
+            transform: translateY(-2px);
+        }
+        .signup-container h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #4a4a4a;
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #666;
+        }
+        .input-field {
+            margin-bottom: 20px;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .input-field input {
+            width: 100%;
+            padding: 12px 40px 12px 40px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s;
+            outline: none;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+        }
+        .input-field input::placeholder {
+            color: #aaa;
+            transition: opacity 0.3s;
+        }
+        .input-field input:focus {
+            border-color: #66a6ff;
+            box-shadow: 0 0 5px rgba(102, 166, 255, 0.5);
+        }
+        .input-field input:focus::placeholder {
+            opacity: 0.6;
+        }
+        .input-field i.fas.fa-envelope,
+        .input-field i.fas.fa-lock {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+            font-size: 16px;
+        }
+        .input-field .show-password {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            font-size: 16px;
+            pointer-events: auto;
+        }
+        .signup-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #66a6ff, #3e8cc9);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+            z-index: 2;
+        }
+        .signup-button:hover {
+            background: linear-gradient(to right, #3e8cc9, #66a6ff);
+            transform: translateY(-2px);
+        }
+        .signup-button:active {
+            transform: scale(0.98);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #66a6ff;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .error {
+            color: #e74c3c;
+            background-color: #fce4e4;
+            border: 1px solid #e74c3c;
+        }
+        .success {
+            color: #27ae60;
+            background-color: #e9f7ef;
+            border: 1px solid #27ae60;
+        }
+        .additional-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .additional-links a {
+            color: #66a6ff;
+            text-decoration: none;
+            transition: color 0.3s;
+            margin: 0 10px;
+        }
+        .additional-links a:hover {
+            color: #3e8cc9;
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+        }
+        @media screen and (max-width: 400px) {
+            .signup-container {
+                width: 98vw;
+                max-width: 98vw;
+                padding: 16px 4vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Code Quest</h1>
+        <h2>Create Your Account</h2>
+        <form id="signup-form">
+            <div class="input-field">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <input type="email" placeholder="Email" id="email" aria-label="Email" required autofocus>
+            </div>
+            <div class="input-field">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <input type="password" placeholder="Password" id="password" aria-label="Password" required minlength="6">
+                <i class="fas fa-eye show-password" id="toggle-password" aria-label="Show password"></i>
+            </div>
+            <div id="password-strength" style="height: 6px; background: #eee; border-radius: 3px; margin-top: 5px; margin-bottom: 10px;"></div>
+            <div class="input-field">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <input type="password" placeholder="Confirm Password" id="confirm-password" aria-label="Confirm Password" required minlength="6">
+                <i class="fas fa-eye show-password" id="toggle-confirm-password" aria-label="Show password"></i>
+            </div>
+            <button class="signup-button" id="signup-button" aria-label="Sign Up" type="submit">
+                Sign Up
+                <span class="loader" id="loader" style="display: none; margin-left: 10px;"></span>
+            </button>
+            <div class="message" id="signup-message" tabindex="-1"></div>
+            <div class="additional-links">
+                <a href="login.html">Already have an account? Login</a>
+            </div>
+            <footer>
+                <p>&copy; 2024 Code Quest. All rights reserved.</p>
+            </footer>
+        </form>
+    </div>
+    <script>
+        // Focus email on load
+        window.onload = () => {
+            const emailInput = document.getElementById('email');
+            if (emailInput) emailInput.focus();
+        };
+        // Password visibility toggles
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+        document.getElementById('toggle-confirm-password').addEventListener('click', function () {
+            const passwordField = document.getElementById('confirm-password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+        // Password strength meter
+        document.getElementById('password').addEventListener('input', function() {
+            const val = this.value;
+            const strengthBar = document.getElementById('password-strength');
+            let strength = 0;
+            if (val.length >= 6) strength += 1;
+            if (/[A-Z]/.test(val)) strength += 1;
+            if (/[0-9]/.test(val)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(val)) strength += 1;
+            const colors = ['#e74c3c', '#f1c40f', '#2ecc71', '#27ae60'];
+            strengthBar.style.width = (strength * 25) + '%';
+            strengthBar.style.background = colors[strength - 1] || '#eee';
+        });
+        // Enter key submits form
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            signup();
+        });
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDdP-roMWmjH9o0JARQWIJGZNglApWlnL0",
+            authDomain: "code-quest-18f83.firebaseapp.com",
+            projectId: "code-quest-18f83",
+            storageBucket: "code-quest-18f83.firebasestorage.app",
+            messagingSenderId: "229847863983",
+            appId: "1:229847863983:web:2707f55c6899795eb97a5a"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        window.signup = async function () {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const message = document.getElementById('signup-message');
+            const loader = document.getElementById('loader');
+            const signupBtn = document.getElementById('signup-button');
+            message.style.display = 'none';
+            loader.style.display = 'inline-block';
+            signupBtn.disabled = true;
+            if (!email || !password || !confirmPassword) {
+                loader.style.display = 'none';
+                signupBtn.disabled = false;
+                message.textContent = 'Please fill in all fields.';
+                message.className = 'message error';
+                message.style.display = 'block';
+                message.focus();
+                return;
+            }
+            if (password !== confirmPassword) {
+                loader.style.display = 'none';
+                signupBtn.disabled = false;
+                message.textContent = 'Passwords do not match.';
+                message.className = 'message error';
+                message.style.display = 'block';
+                message.focus();
+                return;
+            }
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                loader.style.display = 'none';
+                signupBtn.disabled = false;
+                message.textContent = 'Registration successful! Redirecting to login...';
+                message.className = 'message success';
+                message.style.display = 'block';
+                message.focus();
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            } catch (error) {
+                loader.style.display = 'none';
+                signupBtn.disabled = false;
+                const errorCode = error.code;
+                let errorMsg = 'An unexpected error occurred.';
+                switch (errorCode) {
+                    case 'auth/invalid-email':
+                        errorMsg = 'Please enter a valid email address.';
+                        break;
+                    case 'auth/email-already-in-use':
+                        errorMsg = 'This email is already registered.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMsg = 'Password must be at least 6 characters.';
+                        break;
+                    case 'auth/internal-error':
+                        errorMsg = 'Server error. Please try again.';
+                        break;
+                    default:
+                        errorMsg = error.message || 'An unexpected error occurred.';
+                        break;
+                }
+                message.textContent = errorMsg;
+                message.className = 'message error';
+                message.style.display = 'block';
+                message.focus();
+            }
+        };
+    </script>
+</body>
+</html> 
