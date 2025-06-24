@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to Code Quest, a platform for coding enthusiasts to connect, learn, and explore coding challenges.">
+    <meta name="keywords" content="Code Quest, Login, Programming, Coding, Web Development, Learning">
+    <meta name="author" content="Devanshu Sharma">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Code Quest - Login</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2DhKNh4zRvbX+K2IxlISlsgKYBknxWBQnPe8GsgPCn+aOHRqLAEQijPuR5zk3x0eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Styles -->
+    <style>
+        /* Body and background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            background: url('https://cdn.pixabay.com/photo/2023/09/24/15/52/ai-generated-8273245_1280.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            position: relative;
+        }
+
+        /* Overlay for better text readability */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+            z-index: 1;
+        }
+
+        /* Main login container */
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s;
+        }
+
+        .login-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-container h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #4a4a4a;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #666;
+        }
+
+        /* Input fields */
+        .input-field {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s;
+            outline: none;
+            background-color: #f9f9f9;
+        }
+
+        .input-field input::placeholder {
+            color: #aaa;
+            transition: opacity 0.3s;
+        }
+
+        .input-field input:focus {
+            border-color: #66a6ff;
+            box-shadow: 0 0 5px rgba(102, 166, 255, 0.5);
+        }
+
+        .input-field input:focus::placeholder {
+            opacity: 0.6; /* Placeholder opacity on focus */
+        }
+
+        .input-field i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-field .show-password {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Remember Me Checkbox */
+        .remember-me {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remember-me input {
+            margin-right: 10px;
+        }
+
+        /* Login button */
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #66a6ff, #3e8cc9);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-button:hover {
+            background: linear-gradient(to right, #3e8cc9, #66a6ff);
+            transform: translateY(-2px);
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Social buttons */
+        .social-login {
+            margin-top: 20px;
+        }
+
+        .social-login button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .social-login button:hover {
+            transform: scale(1.05);
+        }
+
+        .google-btn {
+            background-color: #db4437;
+        }
+
+        .google-btn:hover {
+            background-color: #c33b2e;
+        }
+
+        .facebook-btn {
+            background-color: #4267B2;
+        }
+
+        .facebook-btn:hover {
+            background-color: #375a9a;
+        }
+
+        /* Links */
+        .additional-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .additional-links a {
+            color: #66a6ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .additional-links a:hover {
+            color: #3e8cc9;
+            text-decoration: underline;
+        }
+
+        /* Loader */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #66a6ff;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error/Success Message */
+        .message {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .error {
+            color: #e74c3c;
+            background-color: #fce4e4;
+            border: 1px solid #e74c3c;
+        }
+
+        .success {
+            color: #27ae60;
+            background-color: #e9f7ef;
+            border: 1px solid #27ae60;
+        }
+
+        /* Footer section */
+        footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Responsive design */
+        @media screen and (max-width: 400px) {
+            .login-container {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Code Quest</h1>
+        <h2>Login to Your Account</h2>
+
+        <form id="login-form">
+            <div class="input-field">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <input type="email" placeholder="Email" id="email" aria-label="Email" required autofocus>
+            </div>
+            <div class="input-field">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <input type="password" placeholder="Password" id="password" aria-label="Password" required minlength="6">
+                <i class="fas fa-eye show-password" id="toggle-password" aria-label="Show password"></i>
+            </div>
+            <div class="remember-me">
+                <input type="checkbox" id="remember" aria-label="Remember Me">
+                <label for="remember">Remember Me</label>
+            </div>
+            <button class="login-button" id="login-button" aria-label="Login" type="submit">
+                Login
+                <span class="loader" id="loader" style="display: none; margin-left: 10px;"></span>
+            </button>
+            <div class="message" id="login-message" tabindex="-1"></div>
+        </form>
+
+        <!-- Social Login -->
+        <div class="social-login">
+            <button class="google-btn" title="Coming soon" disabled>Login with Google (Coming soon)</button>
+            <button class="facebook-btn" title="Coming soon" disabled>Login with Facebook (Coming soon)</button>
+        </div>
+
+        <!-- Additional links -->
+        <div class="additional-links">
+            <a href="#">Forgot Password?</a>
+            <a href="signup.html">Sign Up</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Code Quest. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript Section -->
+    <script>
+        // Focus email on load
+        window.onload = () => {
+            const emailInput = document.getElementById('email');
+            if (emailInput) emailInput.focus();
+        };
+        // Password visibility toggle
+        const togglePassword = document.getElementById('toggle-password');
+        togglePassword.addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+        // Enter key submits form
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            login();
+        });
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import {
+          getAuth,
+          signInWithEmailAndPassword,
+          createUserWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+      
+        // ✅ Your Firebase config (use the one you posted)
+        const firebaseConfig = {
+          apiKey: "AIzaSyDdP-roMWmjH9o0JARQWIJGZNglApWlnL0",
+          authDomain: "code-quest-18f83.firebaseapp.com",
+          projectId: "code-quest-18f83",
+          storageBucket: "code-quest-18f83.firebasestorage.app",
+          messagingSenderId: "229847863983",
+          appId: "1:229847863983:web:2707f55c6899795eb97a5a"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+      
+        // 🔐 Login function
+        window.login = function () {
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+          const message = document.getElementById("login-message");
+          const loader = document.getElementById("loader");
+          const loginBtn = document.getElementById("login-button");
+          message.style.display = "none";
+          loader.style.display = "inline-block";
+          loginBtn.disabled = true;
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              loader.style.display = "none";
+              loginBtn.disabled = false;
+              message.textContent = "Login successful!";
+              message.className = "message success";
+              message.style.display = "block";
+              message.focus();
+              localStorage.setItem("email", email);
+              window.location.href = "Index.html";
+            })
+            .catch((error) => {
+              loader.style.display = "none";
+              loginBtn.disabled = false;
+              const errorCode = error.code;
+              let errorMsg = "An unexpected error occurred.";
+
+              switch (errorCode) {
+                case "auth/invalid-email":
+                  errorMsg = "Please enter a valid email address.";
+                  break;
+                case "auth/user-not-found":
+                  errorMsg = "No account found with this email.";
+                  break;
+                case "auth/wrong-password":
+                  errorMsg = "Incorrect password. Please try again.";
+                  break;
+                case "auth/missing-password":
+                  errorMsg = "Password is required.";
+                  break;
+                case "auth/email-already-in-use":
+                  errorMsg = "This email is already registered.";
+                  break;
+                case "auth/weak-password":
+                  errorMsg = "Password must be at least 6 characters.";
+                  break;
+                case "auth/internal-error":
+                  errorMsg = "Server error. Please try again.";
+                  break;
+                case "auth/invalid-credential":
+                  errorMsg = "Wrong email or password";
+                  break;
+                default:
+                  errorMsg = error.message || "An unexpected error occurred.";
+                  break;
+              }
+              message.textContent = errorMsg;
+              message.className = "message error";
+              message.style.display = "block";
+              message.focus();
+            });
+        };
+      
+        // 📝 Register function (optional)
+        window.register = function () {
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+          const message = document.getElementById("login-message");
+      
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+              message.textContent = "Registration successful!";
+              message.className = "message success";
+              message.style.display = "block";
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              let errorMsg = "An unexpected error occurred.";
+
+              switch (errorCode) {
+                case "auth/invalid-email":
+                  errorMsg = "Please enter a valid email address.";
+                  break;
+                case "auth/email-already-in-use":
+                  errorMsg = "This email is already registered.";
+                  break;
+                case "auth/weak-password":
+                  errorMsg = "Password must be at least 6 characters.";
+                  break;
+                case "auth/internal-error":
+                  errorMsg = "Server error. Please try again.";
+                  break;
+                case "auth/invalid-credential":
+                  errorMsg = "Wrong email or password";
+                  break;
+              }
+              message.textContent = errorMsg;
+              message.className = "message error";
+              message.style.display = "block";
+            });
+        };
+      </script>
+      
+</body>
+</html>

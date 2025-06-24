@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile - Code Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            background: url('https://cdn.pixabay.com/photo/2023/09/24/15/52/ai-generated-8273245_1280.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .profile-card {
+            background: rgba(30, 30, 40, 0.88);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+            padding: 40px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            max-width: 95vw;
+        }
+        .profile-icon {
+            width: 90px;
+            height: 90px;
+            background: #222c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px #0006;
+        }
+        .profile-icon i {
+            font-size: 48px;
+            color: #66a6ff;
+        }
+        .profile-info {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .profile-info h2 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+        .profile-info p {
+            margin: 0;
+            font-size: 18px;
+            color: #b3d1ff;
+        }
+        .back-button {
+            background: #66a6ff;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+        .back-button:hover {
+            background: #3e8cc9;
+        }
+        @media (max-width: 500px) {
+            .profile-card {
+                min-width: 90vw;
+                padding: 18px 4vw 18px 4vw;
+            }
+            .profile-info h2 {
+                font-size: 20px;
+            }
+            .profile-info p {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <div class="profile-icon" id="profile-icon-container" style="position:relative;">
+            <img id="profile-img" src="" alt="Profile Picture" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;">
+            <i class="fas fa-user" id="profile-default-icon"></i>
+            <button id="edit-pic-btn" title="Edit Picture" style="position:absolute;bottom:4px;right:4px;background:#66a6ff;border:none;border-radius:50%;padding:4px;cursor:pointer;box-shadow:0 2px 6px #0004;"><i class="fas fa-camera" style="color:#fff;font-size:14px;"></i></button>
+            <input type="file" id="pic-input" accept="image/*" style="display:none;">
+            <button id="remove-pic-btn" style="display:none;margin-top:10px;background:#e74c3c;color:#fff;border:none;border-radius:8px;padding:6px 18px;cursor:pointer;position:absolute;left:50%;transform:translateX(-50%);bottom:-38px;font-size:14px;">Remove Picture</button>
+        </div>
+        <div class="profile-info">
+            <h2 id="profile-username">User <button id="edit-name-btn" title="Edit Name"><i class="fas fa-edit"></i></button></h2>
+            <div id="edit-name-container" style="display:none; margin-top:10px;">
+                <input type="text" id="edit-name-input" style="padding:6px 10px; border-radius:8px; border:1px solid #66a6ff; font-size:16px; width:180px;">
+                <button id="save-name-btn" style="background:#66a6ff;color:#fff;border:none;border-radius:8px;padding:6px 14px;margin-left:6px;cursor:pointer;">Save</button>
+                <button id="cancel-name-btn" style="background:#eee;color:#333;border:none;border-radius:8px;padding:6px 14px;margin-left:4px;cursor:pointer;">Cancel</button>
+            </div>
+            <p id="profile-email"></p>
+        </div>
+        <button class="back-button" onclick="window.location.href='Index.html'">Back to Main Menu</button>
+    </div>
+    <script>
+        // Get username/email from localStorage
+        let username = localStorage.getItem('username');
+        let email = localStorage.getItem('email');
+        if (!username && email) username = email;
+        document.getElementById('profile-username').childNodes[0].textContent = username ? username + ' ' : 'User ';
+        document.getElementById('profile-email').textContent = email ? email : '';
+
+        // Edit name logic
+        const editBtn = document.getElementById('edit-name-btn');
+        const editContainer = document.getElementById('edit-name-container');
+        const nameInput = document.getElementById('edit-name-input');
+        const saveBtn = document.getElementById('save-name-btn');
+        const cancelBtn = document.getElementById('cancel-name-btn');
+        editBtn.addEventListener('click', function() {
+            nameInput.value = username || '';
+            editContainer.style.display = 'block';
+            editBtn.style.display = 'none';
+        });
+        saveBtn.addEventListener('click', function() {
+            const newName = nameInput.value.trim();
+            if (newName) {
+                localStorage.setItem('username', newName);
+                username = newName;
+                document.getElementById('profile-username').childNodes[0].textContent = newName + ' ';
+            }
+            editContainer.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+        });
+        cancelBtn.addEventListener('click', function() {
+            editContainer.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+        });
+
+        // Profile picture logic
+        const profileImg = document.getElementById('profile-img');
+        const defaultIcon = document.getElementById('profile-default-icon');
+        const editPicBtn = document.getElementById('edit-pic-btn');
+        const picInput = document.getElementById('pic-input');
+        const removePicBtn = document.getElementById('remove-pic-btn');
+        // Load image if available
+        const storedPic = localStorage.getItem('profilePic');
+        if (storedPic) {
+            profileImg.src = storedPic;
+            profileImg.style.display = 'block';
+            defaultIcon.style.display = 'none';
+        } else {
+            profileImg.style.display = 'none';
+            defaultIcon.style.display = 'block';
+        }
+        function updateRemoveBtnVisibility() {
+            removePicBtn.style.display = profileImg.style.display === 'block' ? 'block' : 'none';
+        }
+        updateRemoveBtnVisibility();
+        editPicBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            picInput.click();
+        });
+        picInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    localStorage.setItem('profilePic', evt.target.result);
+                    profileImg.src = evt.target.result;
+                    profileImg.style.display = 'block';
+                    defaultIcon.style.display = 'none';
+                    updateRemoveBtnVisibility();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        removePicBtn.addEventListener('click', function() {
+            localStorage.removeItem('profilePic');
+            profileImg.src = '';
+            profileImg.style.display = 'none';
+            defaultIcon.style.display = 'block';
+            updateRemoveBtnVisibility();
+        });
+        // Also update button visibility on load
+        updateRemoveBtnVisibility();
+    </script>
+</body>
+</html>

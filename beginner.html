@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming Puzzle Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://cdn.pixabay.com/photo/2023/09/24/15/52/ai-generated-8273245_1280.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: rgba(0, 122, 204, 0.8);
+            color: white;
+            padding: 20px 0;
+        }
+
+        #container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #game-area,
+        #image-area {
+            width: 45%;
+        }
+
+        #puzzle {
+            margin: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #eee;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            cursor: move;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        li:hover {
+            background-color: #d9edf7;
+        }
+
+        li.dragover {
+            background-color: #dff0d8;
+            border-color: #3c763d;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #image-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .image-part {
+            width: 100%;
+            display: none;
+            border: 2px solid #ccc;
+            background-size: cover;
+            border-radius: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+		
+		/* Animations and sound effects (if desired) */
+        .code-piece {
+            animation: slideInLeft 0.5s ease-in-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>C Programming Puzzle Game</h1>
+        <p>Arrange the code snippets to reveal the image!</p>
+    </header>
+
+    <div id="container">
+        <section id="game-area">
+            <div id="puzzle">
+                <p id="program-title"></p>
+                <p>Put the code in the correct order:</p>
+                <ul id="code-pieces"></ul>
+            </div>
+            <button id="check-solution">Check Solution</button>
+            <button id="next-program" style="display: none;">Next Program</button>
+            <div id="result"></div>
+        </section>
+
+        <section id="image-area">
+            <!-- Image parts will be dynamically generated here -->
+        </section>
+    </div>
+
+    <div class="button-container">
+        <input type="file" id="file-input" accept=".txt" style="display: none;">
+        <button id="load-file">Load Code Snippets</button>
+    </div>
+
+    <script>
+        let programs = [];
+        let currentProgramIndex = 0;
+
+        document.getElementById('load-file').addEventListener('click', function() {
+            const fileInput = document.getElementById('file-input');
+            fileInput.click(); // Trigger the file input click
+
+            fileInput.onchange = function() {
+                const file = fileInput.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const text = event.target.result;
+                        programs = text.split('---').map(program => program.trim()).filter(Boolean);
+                        loadProgram(currentProgramIndex);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('Please select a file first.');
+                }
+            };
+        });
+
+        function processProgram(program) {
+            const lines = program.split('\n').map(line => line.trim()).filter(line => line !== '');
+            const title = lines[0]; // First line as title
+            const codeSnippets = lines.slice(1); // Remaining lines as code snippets
+            return { title, codeSnippets };
+        }
+
+        function loadProgram(index) {
+            if (index < programs.length) {
+                const { title, codeSnippets } = processProgram(programs[index]);
+                document.getElementById('program-title').textContent = title; // Display title
+                const correctOrder = [...codeSnippets]; // Store the correct order for checking
+                const shuffledSnippets = shuffleArray(codeSnippets); // Shuffle code snippets
+                const imageArea = document.getElementById('image-area');
+                const resultDisplay = document.getElementById('result');
+                const totalImageHeight = 750; // Height of the original image
+                const numberOfParts = shuffledSnippets.length; // Number of code segments
+                const segmentHeight = totalImageHeight / numberOfParts; // Calculate height of each segment
+
+                // Dynamically create image parts
+                imageArea.innerHTML = ''; // Clear previous image parts
+                for (let index = 0; index < numberOfParts; index++) {
+                    const part = document.createElement('div');
+                    part.classList.add('image-part');
+                    part.style.height = `${segmentHeight}px`; // Set height dynamically
+                    part.style.backgroundImage = "url('https://wallpapercave.com/wp/wp7309251.jpg')";
+                    part.style.backgroundPosition = `0 -${index * segmentHeight}px`; // Adjust background position for each part
+                    part.style.backgroundRepeat = 'no-repeat';
+                    imageArea.appendChild(part);
+                }
+
+                // Populate the code pieces
+                const codePiecesUl = document.getElementById('code-pieces');
+                codePiecesUl.innerHTML = ''; // Clear previous code pieces
+                shuffledSnippets.forEach((snippet, index) => {
+                    const li = document.createElement('li');
+                    li.id = `piece${index + 1}`;
+                    li.draggable = true;
+                    li.textContent = snippet;
+                    li.addEventListener('dragstart', dragStart);
+                    li.addEventListener('dragover', dragOver);
+                    li.addEventListener('drop', drop);
+                    codePiecesUl.appendChild(li);
+                });
+
+                // Drag and drop functionality
+                function dragStart(e) {
+                    e.dataTransfer.setData('text/plain', e.target.id);
+                }
+
+                function dragOver(e) {
+                    e.preventDefault();
+                    e.target.classList.add('dragover');
+                }
+
+                function drop(e) {
+                    e.preventDefault();
+                    e.target.classList.remove('dragover');
+                    const draggedId = e.dataTransfer.getData('text');
+                    const draggedElement = document.getElementById(draggedId);
+                    const targetElement = e.target;
+
+                    if (targetElement.tagName === 'LI') {
+                        const temp = targetElement.innerHTML;
+                        targetElement.innerHTML = draggedElement.innerHTML;
+                        draggedElement.innerHTML = temp;
+                    }
+                }
+
+                document.getElementById('check-solution').addEventListener('click', () => {
+                    const userOrder = Array.from(document.querySelectorAll('#code-pieces li')).map(li => li.textContent.trim());
+                    let revealedParts = 0;
+
+                    userOrder.forEach((code, index) => {
+                        const imagePart = imageArea.children[index]; // Accessing dynamically created image parts
+                        // Use trim() to remove any extra spaces before comparing
+                        if (code === correctOrder[index].trim()) {
+                            imagePart.style.display = 'block'; // Reveal the image part
+                            document.getElementById(`piece${index + 1}`).style.backgroundColor = 'lightgreen'; // Change color to green
+                            revealedParts++;
+                        } else {
+                            imagePart.style.display = 'none'; // Hide the image part
+                            document.getElementById(`piece${index + 1}`).style.backgroundColor = '#eee'; // Reset the color
+                        }
+                    });
+
+                    if (revealedParts === correctOrder.length) {
+                        resultDisplay.textContent = 'Congratulations! You have solved the puzzle!';
+                        document.getElementById('next-program').style.display = 'inline-block';
+                    } else {
+                        resultDisplay.textContent = 'Some pieces are still out of order. Keep trying!';
+                        document.getElementById('next-program').style.display = 'none';
+                    }
+                });
+
+                document.getElementById('next-program').addEventListener('click', () => {
+                    currentProgramIndex++;
+                    if (currentProgramIndex < programs.length) {
+                        loadProgram(currentProgramIndex);
+                        resultDisplay.textContent = '';
+                        document.getElementById('next-program').style.display = 'none';
+                    } else {
+                        resultDisplay.textContent = 'No more programs available.';
+                        document.getElementById('next-program').style.display = 'none';
+                    }
+                });
+            } else {
+                alert('No more programs available.');
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+
+</html>
+

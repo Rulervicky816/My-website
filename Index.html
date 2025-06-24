@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Quest - Main Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2DhKNh4zRvbX+K2IxlISlsgKYBknxWBQnPe8GsgPCn+aOHRqLAEQijPuR5zk3x0eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            background: url('https://cdn.pixabay.com/photo/2023/09/24/15/52/ai-generated-8273245_1280.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column; /* Aligns items vertically */
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center; /* Centers text */
+        }
+
+        .main-card {
+            background: rgba(30, 30, 40, 0.85);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+            padding: 40px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 340px;
+            max-width: 95vw;
+            margin: 32px 0;
+        }
+
+        .logo-container {
+            margin-bottom: 18px;
+        }
+        .logo-container i {
+            font-size: 48px;
+            color: #66a6ff;
+            filter: drop-shadow(0 2px 8px #0008);
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Adds depth to the title */
+        }
+
+        .level-button, #profile-button, #edit-button {
+            width: 350px; /* Fixed width for buttons */
+            padding: 15px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            margin: 10px 0; /* Spacing between buttons */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+
+        .level-button {
+            background-color: #66a6ff;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds depth */
+        }
+
+        .level-button:hover {
+            background-color: #3e8cc9;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 24px rgba(102,166,255,0.18);
+        }
+
+        .level-button:active {
+            transform: scale(0.97);
+        }
+
+        #profile-button, #edit-button {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds depth */
+        }
+
+        #profile-button:hover, #edit-button:hover {
+            background-color: #218838;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 24px rgba(40,167,69,0.18);
+        }
+
+        #profile-button:active, #edit-button:active {
+            transform: scale(0.97);
+        }
+
+        /* Flexbox for side-by-side buttons */
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centers buttons */
+            gap: 15px; /* Space between buttons */
+            margin-top: 20px; /* Space between button group and heading */
+        }
+
+        @media (max-width: 500px) {
+            .main-card {
+                min-width: 90vw;
+                padding: 18px 4vw 18px 4vw;
+            }
+            .level-button, #profile-button, #edit-button {
+                width: 90vw;
+                font-size: 15px;
+                padding: 12px 0;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 28px;
+            }
+            .level-button, #profile-button, #edit-button {
+                font-size: 16px;
+                width: 80%; /* Responsive width for smaller screens */
+            }
+        }
+
+        .profile-photo-holder {
+            position: absolute;
+            top: 32px;
+            right: 40px;
+            width: 48px;
+            height: 48px;
+            background: rgba(30, 30, 40, 0.85);
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: box-shadow 0.2s;
+            outline: none;
+        }
+        .profile-photo-holder:focus, .profile-photo-holder.active {
+            box-shadow: 0 0 0 3px #66a6ff, 0 4px 16px rgba(0,0,0,0.18);
+        }
+        .profile-photo-holder i {
+            color: #66a6ff;
+            font-size: 28px;
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 58px;
+            right: 0;
+            background: rgba(30, 30, 40, 0.97);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            min-width: 160px;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 8px 0;
+            z-index: 30;
+        }
+        .profile-dropdown button {
+            background: transparent;
+            color: #66a6ff;
+            border: none;
+            border-bottom: 1px solid #4442;
+            border-radius: 0;
+            padding: 10px 22px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.18s, color 0.18s;
+        }
+        .profile-dropdown button:last-child {
+            border-bottom: none;
+        }
+        .profile-dropdown button:hover {
+            background: #66a6ff;
+            color: #fff;
+        }
+        @media (max-width: 700px) {
+            .profile-photo-holder {
+                top: 12px;
+                right: 8px;
+                width: 38px;
+                height: 38px;
+            }
+            .profile-photo-holder i {
+                font-size: 20px;
+            }
+            .profile-dropdown {
+                min-width: 120px;
+                top: 44px;
+            }
+            .profile-dropdown button {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-photo-holder" id="profile-photo-holder" tabindex="0">
+        <i class="fas fa-user"></i>
+        <div class="profile-dropdown" id="profile-dropdown">
+            <button onclick="window.location.href='view-profile.html'">View Profile</button>
+            <button id="logout-btn">Log Out</button>
+        </div>
+    </div>
+    <div class="main-card">
+        <div class="logo-container">
+            <i class="fas fa-rocket"></i>
+        </div>
+        <h1 id="greeting">Welcome to Code Quest</h1>
+        <button class="level-button" onclick="window.location.href='beginner.html'">Beginner Level</button>
+        <button class="level-button" onclick="window.location.href='intermediate.html'">Intermediate Level</button>
+        <button class="level-button" onclick="window.location.href='expert.html'">Expert Level</button>
+    </div>
+
+    <script>
+        // Try to get username, fallback to email, fallback to generic
+        let username = localStorage.getItem('username');
+        if (!username) {
+            username = localStorage.getItem('email');
+        }
+        if (username) {
+            document.getElementById('greeting').textContent = `Welcome, ${username}`;
+        }
+
+        // Profile dropdown logic
+        const profileHolder = document.getElementById('profile-photo-holder');
+        const dropdown = document.getElementById('profile-dropdown');
+        profileHolder.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+            profileHolder.classList.toggle('active');
+        });
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            dropdown.style.display = 'none';
+            profileHolder.classList.remove('active');
+        });
+        // Keyboard accessibility
+        profileHolder.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+                profileHolder.classList.toggle('active');
+            }
+        });
+        // Log out button
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

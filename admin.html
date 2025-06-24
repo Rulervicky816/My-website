@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard for Code Quest - Manage coding challenges and user data efficiently.">
+    <meta name="keywords" content="Admin, Dashboard, Code Quest, Manage Users, Add Codes, Programming, Coding Challenges">
+    <meta name="author" content="Vivek vardhan reddy">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Code Quest - Admin Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2DhKNh4zRvbX+K2IxlISlsgKYBknxWBQnPe8GsgPCn+aOHRqLAEQijPuR5zk3x0eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Styles -->
+    <style>
+        /* Existing CSS styles here ... */
+        /* Additional styles for new features */
+        .feedback-section {
+            margin-top: 30px;
+        }
+
+        .feedback-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .feedback-button {
+            padding: 10px 20px;
+            background-color: #66a6ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .feedback-button:hover {
+            background-color: #3e8cc9;
+        }
+
+        .leaderboard {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+        .leaderboard h2 {
+            margin-bottom: 15px;
+        }
+
+        /* Responsive design adjustments */
+        @media screen and (max-width: 800px) {
+            /* Existing responsive styles here ... */
+            .feedback-section, .leaderboard {
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Code Quest - Admin Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Admin Menu</h2>
+            <nav>
+                <a href="#add-beginner-code">Add Beginner Code</a>
+                <a href="#add-intermediate-code">Add Intermediate Code</a>
+                <a href="#add-expert-code">Add Expert Code</a>
+                <a href="#manage-codes">Manage Codes</a>
+                <a href="#manage-users">Manage Users</a>
+                <a href="#leaderboard">Leaderboard</a> <!-- New Link for Leaderboard -->
+                <a href="#feedback">Feedback</a> <!-- New Link for Feedback Section -->
+                <a href="#logout" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <section class="add-code-form" id="add-beginner-code">
+                <h2>Add Beginner Code Snippet</h2>
+                <div class="input-field">
+                    <input type="text" placeholder="Code Title" id="beginner-code-title" required>
+                </div>
+                <div class="input-field">
+                    <textarea placeholder="Code Snippet" id="beginner-code-snippet" required></textarea>
+                </div>
+                <input type="file" accept=".txt" id="beginner-code-file" class="file-upload" onchange="loadFile(event, 'beginner-code-snippet')">
+                <button class="add-code-button" onclick="addBeginnerCode()">Add Beginner Code</button>
+                <div id="beginner-code-message" class="message"></div>
+            </section>
+
+            <section class="add-code-form" id="add-intermediate-code">
+                <h2>Add Intermediate Code Snippet</h2>
+                <div class="input-field">
+                    <input type="text" placeholder="Code Title" id="intermediate-code-title" required>
+                </div>
+                <div class="input-field">
+                    <textarea placeholder="Code Snippet" id="intermediate-code-snippet" required></textarea>
+                </div>
+                <input type="file" accept=".txt" id="intermediate-code-file" class="file-upload" onchange="loadFile(event, 'intermediate-code-snippet')">
+                <button class="add-code-button" onclick="addIntermediateCode()">Add Intermediate Code</button>
+                <div id="intermediate-code-message" class="message"></div>
+            </section>
+
+            <section class="add-code-form" id="add-expert-code">
+                <h2>Add Expert Code Snippet</h2>
+                <div class="input-field">
+                    <input type="text" placeholder="Code Title" id="expert-code-title" required>
+                </div>
+                <div class="input-field">
+                    <textarea placeholder="Code Snippet" id="expert-code-snippet" required></textarea>
+                </div>
+                <input type="file" accept=".txt" id="expert-code-file" class="file-upload" onchange="loadFile(event, 'expert-code-snippet')">
+                <button class="add-code-button" onclick="addExpertCode()">Add Expert Code</button>
+                <div id="expert-code-message" class="message"></div>
+            </section>
+
+            <section class="manage-codes" id="manage-codes">
+                <h2>Manage Codes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code Title</th>
+                            <th>Snippet</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="code-list">
+                        <!-- Code data will be populated here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- New Section for User Feedback -->
+            <section class="feedback-section" id="feedback">
+                <h2>User Feedback</h2>
+                <textarea class="feedback-input" placeholder="Share your feedback..." id="user-feedback"></textarea>
+                <button class="feedback-button" onclick="submitFeedback()">Submit Feedback</button>
+                <div id="feedback-message" class="message"></div>
+            </section>
+
+            <!-- New Section for Leaderboard -->
+            <section class="leaderboard" id="leaderboard">
+                <h2>Leaderboard</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-list">
+                        <!-- Leaderboard data will be populated here -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const codes = [];
+        const leaderboard = []; // Array to hold leaderboard data
+
+        function loadFile(event, targetId) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(targetId).value = e.target.result;
+            }
+            reader.readAsText(file);
+        }
+
+        function addBeginnerCode() {
+            const title = document.getElementById('beginner-code-title').value;
+            const codeSnippet = document.getElementById('beginner-code-snippet').value;
+            if (title && codeSnippet) {
+                codes.push({ level: 'beginner', title, snippet: codeSnippet });
+                document.getElementById('beginner-code-message').innerText = 'Beginner Code Added!';
+                document.getElementById('beginner-code-title').value = '';
+                document.getElementById('beginner-code-snippet').value = '';
+                populateCodeList();
+            } else {
+                document.getElementById('beginner-code-message').innerText = 'Please fill in both fields.';
+            }
+        }
+
+        function addIntermediateCode() {
+            const title = document.getElementById('intermediate-code-title').value;
+            const codeSnippet = document.getElementById('intermediate-code-snippet').value;
+            if (title && codeSnippet) {
+                codes.push({ level: 'intermediate', title, snippet: codeSnippet });
+                document.getElementById('intermediate-code-message').innerText = 'Intermediate Code Added!';
+                document.getElementById('intermediate-code-title').value = '';
+                document.getElementById('intermediate-code-snippet').value = '';
+                populateCodeList();
+            } else {
+                document.getElementById('intermediate-code-message').innerText = 'Please fill in both fields.';
+            }
+        }
+
+        function addExpertCode() {
+            const title = document.getElementById('expert-code-title').value;
+            const codeSnippet = document.getElementById('expert-code-snippet').value;
+            if (title && codeSnippet) {
+                codes.push({ level: 'expert', title, snippet: codeSnippet });
+                document.getElementById('expert-code-message').innerText = 'Expert Code Added!';
+                document.getElementById('expert-code-title').value = '';
+                document.getElementById('expert-code-snippet').value = '';
+                populateCodeList();
+            } else {
+                document.getElementById('expert-code-message').innerText = 'Please fill in both fields.';
+            }
+        }
+
+        function populateCodeList() {
+            const codeList = document.getElementById('code-list');
+            codeList.innerHTML = '';
+            codes.forEach((code, index) => {
+                const row = `<tr>
+                    <td>${code.title}</td>
+                    <td>${code.snippet}</td>
+                    <td><button onclick="deleteCode(${index})">Delete</button></td>
+                </tr>`;
+                codeList.innerHTML += row;
+            });
+        }
+
+        function deleteCode(index) {
+            codes.splice(index, 1);
+            populateCodeList();
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById('user-feedback').value;
+            if (feedback) {
+                // For simplicity, we'll just log feedback in the console
+                console.log("Feedback received:", feedback);
+                document.getElementById('feedback-message').innerText = 'Thank you for your feedback!';
+                document.getElementById('user-feedback').value = ''; // Clear the input
+            } else {
+                document.getElementById('feedback-message').innerText = 'Please enter your feedback.';
+            }
+        }
+
+        function populateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
+            leaderboard.forEach((user) => {
+                const row = `<tr>
+                    <td>${user.name}</td>
+                    <td>${user.points}</td>
+                </tr>`;
+                leaderboardList.innerHTML += row;
+            });
+        }
+
+         // Simulated logout function
+        function logout() {
+            alert('Logged out successfully!');
+            // Redirect to the login page
+            window.location.href = 'login1.html';
+        }
+    </script>
+</body>
+</html>
